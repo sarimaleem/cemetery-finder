@@ -6,31 +6,35 @@ const sqlite3 = require("sqlite3");
 const db = new sqlite3.Database("people.db");
 
 // TODO: figure out how this works?
-// app.use(express.static('frontend/'))
+// app.use(express.static(path.join(__dirname, 'frontend/')))
+
+//Middleware
 app.use(express.json());
+
+//Simple requests
 app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "frontend/home.html"));
+  res.sendFile(path.join(__dirname, "frontend/home.html"));
 });
 
 app.post("/", (req, res) => {
-    const user = req.body;
-    if (user.first === undefined || user.last === undefined) {
-        res.status(400).json({ msg: "bad body" });
-    } else {
-        db.run(
-            `insert into people (id, first, last) values (?, ?, ?);`,
-            parseInt(Math.random() * 1000000),
-            user.first,
-            user.last
-        );
-        db.all("select * from people", (err, rows) => {
-            console.log(rows);
-        });
-        res.status(201).json({ msg: "object created" });
-    }
+  const userData = req.body;
+
+  if (userData.first === undefined || userData.last === undefined)
+    return res.status(400).json({ msg: "bad body" });
+
+  db.run(
+    "INSERT INTO people (id, first, last) VALUES (?, ?, ?);",
+    parseInt(Math.random() * 1000000),
+    userData.first,
+    userData.last
+  );
+
+  res.status(201).json({ msg: "object created" });
 });
 
+//Search functionality
+app.use("/search", require("./search/search_api"));
+
 app.listen(port, () => {
-    port;
-    console.log(`listening at ${port}`);
+  console.log(`listening at ${port}`);
 });
