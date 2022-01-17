@@ -10,6 +10,7 @@ const db = new sqlite3.Database("people.db");
 
 //Middleware
 app.use(express.json());
+app.use(express.static("frontend"))
 
 //Simple requests
 app.get("/", (req, res) => {
