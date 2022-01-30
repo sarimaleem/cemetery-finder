@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const sqlite3 = require("sqlite3");
-const fuzzysort = require("fuzzysort");
+const Fuse = require("fuse.js");
 const db = new sqlite3.Database("./people.db");
 
 router.get("/", (req, res) => {
@@ -10,14 +10,18 @@ router.get("/", (req, res) => {
   db.all(
     "SELECT id, first, last, first || ' ' || last AS fullname FROM people",
     (err, rows) => {
-      if(err != null) {
-        return res.status(400).json({ 'msg' : 'query failed' })
+      if (err != null) {
+        return res.status(400).json({ msg: "query failed" });
       }
-      const searchResults = fuzzysort.go(query, rows, { key: "fullname" });
-      return res.status(200).json(searchResults);
+
+      const searcher = new Fuse(rows, {
+        keys: ["first", "last", "fullname"],
+      });
+
+      results = searcher.search(query);
+      return res.status(200).json(results);
     }
   );
 });
-
 
 module.exports = router;
