@@ -13,9 +13,9 @@ function SearchForm({Search, error}) {
         <div className="form-inner">
             <div className="form-group">
                 <label htmlFor="name">Name: </label>
-                <input type="text" name="name" id="name" onChange={event => setDetails({...details, name: event.target.value})} value={details.name}/>
+                <input type="text" name="name" id="name" placeholder="Enter a Name..." onChange={event => setDetails({...details, name: event.target.value})} value={details.name}/>
+                <input type="submit" value ="Search"/>
             </div>
-            <input type="submit" value ="Search"/>
         </div>
     </form>
   )

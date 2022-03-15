@@ -12,7 +12,13 @@ function App() {
 
   return (
     <div className="App">
-      new front end with react
+      <header>
+        <ul>
+          <li>Denton Muslim Cemetary</li>
+          <li>Login | Contact us</li>
+        </ul>
+      </header>
+      <h1>Grave Finder</h1>
       <SearchForm Search={Search} error={error}/>
     </div>
   );
